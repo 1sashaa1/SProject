@@ -1,0 +1,5 @@
+<Configuration>
+    <Loggers>
+        <Logger name="org.hibernate" level="error" />
+    </Loggers>
+</Configuration>

@@ -4,22 +4,69 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ca17c775-5022-47b7-87cf-d2ce175f9528" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
+    <list default="true" id="ca17c775-5022-47b7-87cf-d2ce175f9528" name="Changes" comment="Create commit">
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/DataAccessObjects/ClientDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/DataAccessObjects/DepositDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/DataAccessObjects/EmployeeDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/DataAccessObjects/HibernateSessionFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/DataAccessObjects/NotificationsDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/DataAccessObjects/UserDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Enums/RequestType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Enums/ResponseStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Enums/Roles.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Interfaces/DAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Interfaces/Service.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/ClientDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Admin.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Client.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Deposit.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Employee.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Notifications.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/TCP/Request.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/TCP/Response.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Services/ClientService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Services/DepositService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Services/EmployeeService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Services/NotificationService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Services/UserService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Utility/ClientThread.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Deposit.hbm.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/log4j2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="FxmlFile" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;1sashaa1&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/1sashaa1/SProject.git&quot;,
+    &quot;accountId&quot;: &quot;84c8c4ad-c9d6-442a-88a9-3340910053da&quot;
+  }
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
 }</component>
@@ -31,11 +78,27 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/course 3/Курсовой проект/MyProject/CProject&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.general&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql_aurora_aws&quot;,
+      &quot;mysql&quot;
+    ]
   }
 }</component>
   <component name="SharedIndexes">
@@ -56,10 +119,81 @@
       <updated>1729239223816</updated>
       <workItem from="1729239224882" duration="13000" />
       <workItem from="1729239449537" duration="4000" />
+      <workItem from="1729239488497" duration="185000" />
+      <workItem from="1729239685566" duration="447000" />
+      <workItem from="1729240156842" duration="2689000" />
+      <workItem from="1729244018341" duration="81000" />
+      <workItem from="1729244143242" duration="558000" />
+      <workItem from="1729244727352" duration="25000" />
+      <workItem from="1729244769789" duration="10000" />
+      <workItem from="1729244848488" duration="113000" />
+      <workItem from="1729245026796" duration="45000" />
+      <workItem from="1729245098702" duration="24000" />
+      <workItem from="1729245134984" duration="13000" />
+      <workItem from="1729245156756" duration="34000" />
+      <workItem from="1729245206808" duration="14000" />
+      <workItem from="1729245240166" duration="31000" />
+      <workItem from="1729245283747" duration="176000" />
+      <workItem from="1729245477989" duration="4615000" />
+      <workItem from="1729261775086" duration="385000" />
+      <workItem from="1729262292771" duration="83000" />
+      <workItem from="1729505620097" duration="2352000" />
+      <workItem from="1729508103326" duration="3571000" />
+      <workItem from="1729521135729" duration="738000" />
+      <workItem from="1729522022442" duration="2606000" />
+      <workItem from="1729537955492" duration="1100000" />
+      <workItem from="1729544036339" duration="81000" />
+      <workItem from="1729583025505" duration="1998000" />
+      <workItem from="1729585063211" duration="12000" />
+      <workItem from="1729585122819" duration="9000" />
+      <workItem from="1729585266836" duration="18000" />
+      <workItem from="1729587653349" duration="5211000" />
+      <workItem from="1729592899701" duration="4650000" />
+      <workItem from="1729601332008" duration="4718000" />
+      <workItem from="1729607635253" duration="3436000" />
+      <workItem from="1729615997369" duration="611000" />
+      <workItem from="1729624067014" duration="9245000" />
+      <workItem from="1729686948237" duration="6832000" />
+      <workItem from="1729707706115" duration="3173000" />
+      <workItem from="1729835569551" duration="2673000" />
+      <workItem from="1729845702360" duration="3767000" />
+      <workItem from="1730124801487" duration="153000" />
+      <workItem from="1730444645738" duration="3000" />
+      <workItem from="1730488470919" duration="58000" />
+      <workItem from="1730964770527" duration="3491000" />
+      <workItem from="1730972697745" duration="1361000" />
+      <workItem from="1730982728936" duration="5586000" />
+      <workItem from="1731053874707" duration="1036000" />
+      <workItem from="1731079907008" duration="204000" />
+      <workItem from="1731265890726" duration="3258000" />
+      <workItem from="1731320095224" duration="5309000" />
+      <workItem from="1731329731991" duration="403000" />
+      <workItem from="1731338842144" duration="8977000" />
+      <workItem from="1731351770320" duration="3866000" />
+      <workItem from="1731396690288" duration="58000" />
+      <workItem from="1731396754074" duration="1471000" />
+      <workItem from="1731398671976" duration="702000" />
+      <workItem from="1731399598374" duration="13000" />
+      <workItem from="1731399620889" duration="8871000" />
+      <workItem from="1731416015425" duration="56000" />
+      <workItem from="1731416079748" duration="2363000" />
     </task>
+    <task id="LOCAL-00001" summary="Create commit">
+      <option name="closed" value="true" />
+      <created>1729239627856</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1729239627856</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Create commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="Create commit" />
   </component>
 </project>
