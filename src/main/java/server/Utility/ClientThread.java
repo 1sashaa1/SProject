@@ -3,19 +3,17 @@ package server.Utility;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.hibernate.Hibernate;
+import com.google.gson.JsonObject;
+import server.DataAccessObjects.ClientsDepositsDAO;
+import server.DataAccessObjects.NotificationsDAO;
 import server.Enums.ResponseStatus;
 import server.Models.DTO.ClientDTO;
-import server.Models.Entities.Client;
-import server.Models.Entities.Deposit;
-import server.Models.Entities.Notifications;
-import server.Models.Entities.User;
+import server.Models.DTO.NotificationDTO;
+import server.Models.DTO.UserDTO;
+import server.Models.Entities.*;
 import server.Models.TCP.Response;
 import server.Models.TCP.Request;
-import server.Services.ClientService;
-import server.Services.DepositService;
-import server.Services.NotificationService;
-import server.Services.UserService;
+import server.Services.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -38,6 +36,9 @@ public class ClientThread implements Runnable {
     private ClientService clientService = new ClientService();
     private DepositService depositService = new DepositService();
     private NotificationService notificationService = new NotificationService();
+    private ClientsDepositsService clientsDepositsService = new ClientsDepositsService();
+    NotificationsDAO notificationsDAO = new NotificationsDAO();
+    NotificationService notificationService1 = new NotificationService(notificationsDAO);
     // добавить другие
 
     public ClientThread(Socket clientSocket) throws IOException {
@@ -47,6 +48,9 @@ public class ClientThread implements Runnable {
         gson = new Gson();
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         out = new PrintWriter(clientSocket.getOutputStream());
+    }
+    private Client convertDtoToClient(ClientDTO clientDTO) {
+        return new Client(clientDTO.getId());
     }
 
     @Override
@@ -181,9 +185,9 @@ public class ClientThread implements Runnable {
                         break;
                     }
                     case GETCLIENTS: {
-                        List<Client> allClients = clientService.findAllEntities();
-                        List<ClientDTO> clientDTOs = allClients.stream()
-                                .map(ClientDTO::new)
+                        List<User> allUsers = userService.findAllEntities();
+                        List<UserDTO> clientDTOs = allUsers.stream()
+                                .map(UserDTO::new)
                                 .collect(Collectors.toList());
 
                         String clientsJson = gson.toJson(clientDTOs);
@@ -192,7 +196,6 @@ public class ClientThread implements Runnable {
                         response = new Response(ResponseStatus.OK, "Clients retrieved successfully.", clientsJson);
                         break;
                     }
-
 
                     case SENDNOTIFICATION: {
                         Notifications notification = gson.fromJson(request.getRequestMessage(), Notifications.class);
@@ -208,13 +211,67 @@ public class ClientThread implements Runnable {
                         System.out.println("Полученная рассылка: " + notification);
                         break;
                     }
+                    case GETNOTIFICATIONS: {
+
+                        int clientId = gson.fromJson(request.getRequestMessage(), Integer.class);
+
+                        List<Notifications> clientNotifications = notificationService1.findNotificationsByClientId(clientId);
+
+                        System.out.println("Список: " + clientNotifications);
+
+                        List<NotificationDTO> notificationDTOs = clientNotifications.stream()
+                                .map(notification -> new NotificationDTO(notification.getId(), notification.getMessage(), notification.isRead()))
+                                .collect(Collectors.toList());
+
+                        String notificationsJson = gson.toJson(notificationDTOs);
+                        System.out.println("Уведомления клиента JSON: " + notificationsJson);
+
+                        response = new Response(ResponseStatus.OK, "Notifications retrieved successfully.", notificationsJson);
+                        break;
+                    }
+                    case OPENDEPOSIT: {
+                        JsonObject jsonObject = gson.fromJson(request.getRequestMessage(), JsonObject.class); // Парсим JSON
+                        int depositId = jsonObject.get("depositId").getAsInt();
+                        int clientId = jsonObject.get("clientId").getAsInt();
+
+                        System.out.println("Запрос на открытие депозита с ID: " + depositId + " от клиента с ID: " + clientId);
+
+                        Deposit depositToOpen = depositService.findEntity(depositId);
+
+                        ClientDTO clientDTO = userService.findClientByClientId(clientId);
+                        Client client = convertDtoToClient(clientDTO);
+
+                        if (client == null) {
+                            throw new IllegalArgumentException("Client not found for clientId: " + clientId);
+                        }
+
+                        if (depositToOpen != null && client != null) {
+
+                            ClientsDeposits newRequest = new ClientsDeposits();
+                            newRequest.setDeposit(depositToOpen);
+                            newRequest.setClient(client);
+                            newRequest.setOpen(false);
+                            newRequest.setFirstAmount(0.0);
+                            newRequest.setOpeningDate(null);
+
+                            clientsDepositsService.saveEntity(newRequest);
+
+                            response = new Response(ResponseStatus.OK, "Запрос на открытие депозита сохранён!", gson.toJson(newRequest));
+                            System.out.println("Запрос на открытие депозита сохранён! " + newRequest);
+                        } else {
+                            String errorMessage = (depositToOpen == null ? "Депозит не найден. " : "") +
+                                    (client == null ? "Клиент не найден." : "");
+                            response = new Response(ResponseStatus.ERROR, "Не удалось сохранить запрос на открытие. " + errorMessage);
+                            System.out.println("Ошибка: " + errorMessage);
+                        }
+                        break;
+                    }
 
                     default:
                         response = new Response(ResponseStatus.ERROR, "Unknown request type.");
                         break;
                 }
 
-                // Отправка ответа клиенту
                 String jsonResponse = new Gson().toJson(response);
                 System.out.println(gson.toJson(response));
                 System.out.println("Sending response: " + jsonResponse);

@@ -1,26 +1,24 @@
 package server.Services;
 
-import server.DataAccessObjects.DepositDAO;
 import server.DataAccessObjects.NotificationsDAO;
-import server.DataAccessObjects.UserDAO;
-import server.Interfaces.DAO;
 import server.Interfaces.Service;
-import server.Models.Entities.Deposit;
 import server.Models.Entities.Notifications;
-import server.Models.Entities.User;
 
+import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class NotificationService implements Service<Notifications> {
 
-    NotificationsDAO daoService = new NotificationsDAO(); // добавить работу с базой данных
+    private NotificationsDAO daoService;
+
+    public NotificationService(NotificationsDAO daoService) {
+        this.daoService = daoService;
+    }
 
     @Override
     public Notifications findEntity(int id) {
         Notifications entity = (Notifications) daoService.findById(id);
-        if (entity.getMessage() != null)  {
-
-        }
         return entity;
     }
 
@@ -41,6 +39,24 @@ public class NotificationService implements Service<Notifications> {
 
     @Override
     public List<Notifications> findAllEntities() {
-        return  daoService.findAll();
+        return daoService.findAll();
+    }
+
+    public NotificationService() {
+        this.daoService = new NotificationsDAO();
+    }
+
+    public List<Notifications> findNotificationsByClientId(int clientId) {
+        System.out.println("ID КЛИЕНТА ДЛЯ ПОИСКА РАССЫЛОК " + clientId);
+
+        List<Notifications> allNotifications = findAllEntities();
+
+        List<Notifications> filteredNotifications = allNotifications.stream()
+                .filter(notification -> notification.getClientId() == clientId) // Фильтрация по client_id
+                .collect(Collectors.toList());
+
+        System.out.println("Отфильтрованные уведомления: " + filteredNotifications);
+
+        return filteredNotifications;
     }
 }

@@ -16,6 +16,10 @@ public class ClientDTO {
 
     }
 
+    public ClientDTO(int id) {
+        this.id = id;
+    }
+
     public int getId() {
         return id;
     }

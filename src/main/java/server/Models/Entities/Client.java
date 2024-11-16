@@ -63,6 +63,10 @@ public class Client implements Serializable {
         this.users = users;
     }
 
+    public Client(int clientId) {
+        this.id = clientId;
+    }
+
     public int getId() {
         return id;
     }

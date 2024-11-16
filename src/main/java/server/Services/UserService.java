@@ -3,9 +3,12 @@ package server.Services;
 import server.DataAccessObjects.UserDAO;
 import server.Interfaces.DAO;
 import server.Interfaces.Service;
+import server.Models.DTO.ClientDTO;
+import server.Models.Entities.Client;
 import server.Models.Entities.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public class UserService implements Service<User> {
 
@@ -40,4 +43,17 @@ public class UserService implements Service<User> {
     public List<User> findAllEntities() {
         return  daoService.findAll();
     }
+
+    public ClientDTO findClientByClientId(int clientId) {
+        Optional<User> optionalUser = findAllEntities().stream()
+                .filter(u -> u.getClient() != null && u.getId() == clientId)
+                .findFirst();
+
+        return optionalUser.map(user -> convertToClientDTO(user.getClient())).orElse(null);
+    }
+
+    private ClientDTO convertToClientDTO(Client client) {
+        return new ClientDTO(client.getId());
+    }
+
 }

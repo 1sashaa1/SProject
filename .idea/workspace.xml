@@ -4,39 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ca17c775-5022-47b7-87cf-d2ce175f9528" name="Changes" comment="Create commit">
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/DataAccessObjects/ClientDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/DataAccessObjects/DepositDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/DataAccessObjects/EmployeeDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/DataAccessObjects/HibernateSessionFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/DataAccessObjects/NotificationsDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/DataAccessObjects/UserDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Enums/RequestType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Enums/ResponseStatus.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Enums/Roles.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Interfaces/DAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Interfaces/Service.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/ClientDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Admin.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Client.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Deposit.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Employee.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Notifications.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/TCP/Request.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/TCP/Response.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Services/ClientService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Services/DepositService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Services/EmployeeService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Services/NotificationService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Services/UserService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Utility/ClientThread.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Deposit.hbm.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/log4j2.xml" afterDir="false" />
+    <list default="true" id="ca17c775-5022-47b7-87cf-d2ce175f9528" name="Changes" comment="Employee deposit and notification">
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/DataAccessObjects/ClientsDepositsDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/NotificationDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/UserDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/ClientsDeposits.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Services/ClientsDepositsService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/server/DataAccessObjects/NotificationsDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/DataAccessObjects/NotificationsDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/server/Enums/RequestType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Enums/RequestType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/server/Models/DTO/ClientDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/ClientDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Notifications.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Notifications.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/server/Services/NotificationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Services/NotificationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/server/Services/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Services/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/server/Utility/ClientThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Utility/ClientThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -176,7 +159,14 @@
       <workItem from="1731399598374" duration="13000" />
       <workItem from="1731399620889" duration="8871000" />
       <workItem from="1731416015425" duration="56000" />
-      <workItem from="1731416079748" duration="2363000" />
+      <workItem from="1731416079748" duration="6514000" />
+      <workItem from="1731443619184" duration="3544000" />
+      <workItem from="1731504825375" duration="23750000" />
+      <workItem from="1731582023907" duration="2324000" />
+      <workItem from="1731608550275" duration="3482000" />
+      <workItem from="1731661146568" duration="9485000" />
+      <workItem from="1731683717695" duration="1736000" />
+      <workItem from="1731763135308" duration="3917000" />
     </task>
     <task id="LOCAL-00001" summary="Create commit">
       <option name="closed" value="true" />
@@ -186,7 +176,15 @@
       <option name="project" value="LOCAL" />
       <updated>1729239627856</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Employee deposit and notification">
+      <option name="closed" value="true" />
+      <created>1731418759646</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1731418759646</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -194,6 +192,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Create commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="Create commit" />
+    <MESSAGE value="Employee deposit and notification" />
+    <option name="LAST_COMMIT_MESSAGE" value="Employee deposit and notification" />
   </component>
 </project>

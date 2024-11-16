@@ -3,17 +3,12 @@ package server.DataAccessObjects;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import server.Interfaces.DAO;
-import server.Models.Entities.Client;
-import server.Models.Entities.Notifications;
-import server.Models.Entities.User;
+import server.Models.Entities.ClientsDeposits;
+import server.Models.Entities.Deposit;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
-public class NotificationsDAO implements DAO {
-    public NotificationsDAO() {
-    }
-
+public class ClientsDepositsDAO implements DAO {
     @Override
     public void save(Object obj) {
         Session session = HibernateSessionFactory.getSessionFactory().openSession();
@@ -45,15 +40,15 @@ public class NotificationsDAO implements DAO {
     @Override
     public Object findById(int id) {
         Session session = HibernateSessionFactory.getSessionFactory().openSession();
-        Notifications notification = session.get(Notifications.class, id);
+        ClientsDeposits deposit = session.get(ClientsDeposits.class, id);
         session.close();
-        return notification;
+        return deposit;
     }
 
     @Override
     public List findAll() {
         Session session = HibernateSessionFactory.getSessionFactory().openSession();
-        List<Notifications> deposit = session.createQuery("From Notifications", Notifications.class).list();
+        List<ClientsDeposits> deposit = session.createQuery("From ClientsDeposits", ClientsDeposits.class).list();
         session.close();
         return deposit;
     }
