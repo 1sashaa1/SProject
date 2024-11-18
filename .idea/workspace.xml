@@ -4,22 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ca17c775-5022-47b7-87cf-d2ce175f9528" name="Changes" comment="Employee deposit and notification">
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/DataAccessObjects/ClientsDepositsDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/NotificationDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/UserDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/ClientsDeposits.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Services/ClientsDepositsService.java" afterDir="false" />
+    <list default="true" id="ca17c775-5022-47b7-87cf-d2ce175f9528" name="Changes" comment="Request to open deposits">
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/ClientsDepositsDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/DepositDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/JoinClientsDepositsDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Utility/HibernateUtil.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/server/DataAccessObjects/NotificationsDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/DataAccessObjects/NotificationsDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/server/Enums/RequestType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Enums/RequestType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/server/Models/DTO/ClientDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/ClientDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Notifications.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Notifications.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/server/Services/NotificationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Services/NotificationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/server/Services/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Services/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/server/Models/Entities/ClientsDeposits.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/ClientsDeposits.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Deposit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Deposit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/server/Services/ClientsDepositsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Services/ClientsDepositsService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/server/Utility/ClientThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Utility/ClientThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,7 +70,7 @@
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.general&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editing.templates&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -166,7 +162,10 @@
       <workItem from="1731608550275" duration="3482000" />
       <workItem from="1731661146568" duration="9485000" />
       <workItem from="1731683717695" duration="1736000" />
-      <workItem from="1731763135308" duration="3917000" />
+      <workItem from="1731763135308" duration="6910000" />
+      <workItem from="1731832488435" duration="24959000" />
+      <workItem from="1731935071168" duration="3523000" />
+      <workItem from="1731961015793" duration="1016000" />
     </task>
     <task id="LOCAL-00001" summary="Create commit">
       <option name="closed" value="true" />
@@ -184,7 +183,15 @@
       <option name="project" value="LOCAL" />
       <updated>1731418759646</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Request to open deposits">
+      <option name="closed" value="true" />
+      <created>1731776476701</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1731776476701</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -193,6 +200,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Create commit" />
     <MESSAGE value="Employee deposit and notification" />
-    <option name="LAST_COMMIT_MESSAGE" value="Employee deposit and notification" />
+    <MESSAGE value="Request to open deposits" />
+    <option name="LAST_COMMIT_MESSAGE" value="Request to open deposits" />
   </component>
 </project>

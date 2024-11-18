@@ -1,49 +1,45 @@
-package server.Models.Entities;
+package server.Models.DTO;
 
-import javax.persistence.Entity;
-import java.io.Serializable;
-import java.util.HashSet;
-import javax.persistence.*;
-import java.util.Date;
+import server.Models.Entities.ClientsDeposits;
+import server.Models.Entities.Deposit;
+import server.Models.Entities.User;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import java.util.List;
-import java.util.Set;
 
-@Entity
-@Table(name = "datadeposit")
-public class Deposit implements Serializable{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+public class DepositDTO {
     private int id;
 
-    @Column(name = "name", length = 45)
     private String nameDeposit;
 
-    @Column(name = "type", length = 45)
     private String type;
 
-    @Column(name = "interestRate", length = 45)
     private double interestRate;
 
-    @Column(name = "minAmount", length = 45)
     private double minAmount;
 
-    @Column(name = "term", length = 45)
     private double term;
 
-    @Column(name = "isReplenishment", length = 45)
     private boolean isReplenishment;
 
-    @Column(name = "isTransactions", length = 45)
     private boolean isTransactions;
 
-    @Column(name = "isProlongation", length = 45)
     private boolean isProlongation;
 
-    @OneToMany(mappedBy = "deposit", orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<ClientsDeposits> clientsDeposits;
-
-    public Deposit() {}
+    public DepositDTO (Deposit deposit) {
+        this.id = deposit.getId();
+        this.nameDeposit = deposit.getName();
+        this.type = deposit.getType();
+        this.interestRate = deposit.getInterestRate();
+        this.minAmount = deposit.getMinAmount();
+        this.term = deposit.getTerm();
+        this.isReplenishment = deposit.isReplenishment();
+        this.isTransactions = deposit.isTransactions();
+        this.isProlongation = deposit.isProlongation();
+    }
 
     public int getId() {
         return id;
@@ -89,7 +85,7 @@ public class Deposit implements Serializable{
         return term;
     }
 
-    public void setTerm(int term) {
+    public void setTerm(double term) {
         this.term = term;
     }
 

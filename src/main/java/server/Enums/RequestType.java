@@ -11,5 +11,8 @@ public enum RequestType { //перечисление, набор констан�
     GETCLIENTS,
     SENDNOTIFICATION,
     GETNOTIFICATIONS,
-    OPENDEPOSIT
+    OPENDEPOSIT,
+    EOPENDEPOSIT,
+    ECLOSEDEPOSIT,
+    GETCLIENTSDEPOSITS
 }

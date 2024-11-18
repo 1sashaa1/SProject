@@ -3,6 +3,7 @@ package server.Models.Entities;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "deposit")
@@ -17,11 +18,13 @@ public class ClientsDeposits implements Serializable {
     private double firstAmount;
     @Column(name = "opening_date", length = 45)
     private Date openingDate;
-    @OneToOne
-    @JoinColumn(name = "client_client_id")
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "client_client_id",nullable = true)
     private Client client;
-    @ManyToOne
-    @JoinColumn(name = "id_dep_data")
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_dep_data", nullable = true)
     private Deposit deposit;
 
     public ClientsDeposits() {
@@ -59,8 +62,6 @@ public class ClientsDeposits implements Serializable {
         this.openingDate = openingDate;
     }
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "client_client_id", nullable = true)
     public Client getClient() {
         return client;
     }
@@ -69,8 +70,6 @@ public class ClientsDeposits implements Serializable {
         this.client = client;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_dep_data", nullable = true)
     public Deposit getDeposit() {
         return deposit;
     }

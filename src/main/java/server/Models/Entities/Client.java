@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -44,8 +45,11 @@ public class Client implements Serializable {
     @Column(name = "document_number", length = 45)
     private String documentNumber;
 
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<User> users = new HashSet<>();
+
+    @OneToMany(mappedBy = "client", orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<ClientsDeposits> clientsDeposits;
 
     public Client() {
     }
