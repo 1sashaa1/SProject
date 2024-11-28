@@ -1,10 +1,6 @@
 package server.Utility;
 
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import server.DataAccessObjects.ClientsDepositsDAO;
+import com.google.gson.*;
 import server.DataAccessObjects.NotificationsDAO;
 import server.Enums.ResponseStatus;
 import server.Models.DTO.*;
@@ -38,6 +34,7 @@ public class ClientThread implements Runnable {
     private DepositService depositService = new DepositService();
     private NotificationService notificationService = new NotificationService();
     private ClientsDepositsService clientsDepositsService = new ClientsDepositsService();
+    private QuestionService questionService = new QuestionService();
     NotificationsDAO notificationsDAO = new NotificationsDAO();
     NotificationService notificationService1 = new NotificationService(notificationsDAO);
     // добавить другие
@@ -110,10 +107,11 @@ public class ClientThread implements Runnable {
                             User returnUserId;
                             returnUserId = userService.findEntity(returnUser.getId());
                             System.out.println("returnUser: " + returnUserId);
-                            response = new Response(ResponseStatus.OK, "User login successfully.", gson.toJson(returnUserId));
-                            System.out.println("ID: " + returnUserId.getId());
+                            UserDTO returnId = new UserDTO(returnUserId);
+                            response = new Response(ResponseStatus.OK, "User login successfully.", gson.toJson(returnId));
+                            System.out.println("ID: " + returnId.getId());
                             System.out.println("Response object: " + response);
-                            System.out.println("Полученный пользователь: " + returnUserId);
+                            System.out.println("Полученный пользователь: " + returnId);
                         } else {
                             response = new Response(ResponseStatus.ERROR, "User not found or incorrect credentials.");
                             System.out.println("Пользователь не найден или неверные учетные данные.");
@@ -292,20 +290,23 @@ public class ClientThread implements Runnable {
                                 throw new IllegalArgumentException("Депозит с именем \"" + nameDeposit + "\" для клиента с ID " + idDeposit + " не найден.");
                             }
 
+
                             // Обновляем поля
                             existingDeposit.setOpen(isOpen);
                             existingDeposit.setFirstAmount(firstAmount);
                             existingDeposit.setOpeningDate(openingDate);
-
-                            // Сохраняем изменения
+                            System.out.println("Данные депозита успешно установлены: " + existingDeposit);
                             clientsDepositsService.updateEntity(existingDeposit);
+                            ClientsDepositsDTO existingDeposit1 = new ClientsDepositsDTO(existingDeposit);
+                            // Сохраняем изменения
+                            System.out.println("Данные депозита успешно обновлены: " + existingDeposit);
 
                             response = new Response(
                                     ResponseStatus.OK,
                                     "Данные депозита успешно обновлены!",
-                                    gson.toJson(existingDeposit)
+                                    gson.toJson(existingDeposit1)
                             );
-                            System.out.println("Данные депозита успешно обновлены: " + existingDeposit);
+                            System.out.println("Данные депозита успешно обновлены: " + existingDeposit1);
 
                         } catch (IllegalArgumentException e) {
                             response = new Response(ResponseStatus.ERROR, "Ошибка: " + e.getMessage());
@@ -316,8 +317,6 @@ public class ClientThread implements Runnable {
                         }
                         break;
                     }
-
-
 
                     case ECLOSEDEPOSIT: {
                         JsonObject jsonObject = gson.fromJson(request.getRequestMessage(), JsonObject.class);
@@ -339,13 +338,14 @@ public class ClientThread implements Runnable {
                             existingRequest.setFirstAmount(0);
 
                             clientsDepositsService.updateEntity(existingRequest);
+                            ClientsDepositsDTO existingRequest1 = new ClientsDepositsDTO(existingRequest);
 
                             response = new Response(
                                     ResponseStatus.OK,
                                     "Депозит успешно закрыт!",
-                                    gson.toJson(existingRequest)
+                                    gson.toJson(existingRequest1)
                             );
-                            System.out.println("Депозит успешно закрыт: " + existingRequest);
+                            System.out.println("Депозит успешно закрыт: " + existingRequest1);
 
                         } catch (IllegalArgumentException e) {
                             response = new Response(ResponseStatus.ERROR, "Ошибка: " + e.getMessage());
@@ -362,7 +362,6 @@ public class ClientThread implements Runnable {
                         List<JoinClientsDepositsDTO> combinedData = clientsDepositsService.getCombinedData();
                         System.out.println("Combined Data: " + combinedData);
 
-
                         if (combinedData != null && !combinedData.isEmpty()) {
                             String depositsJson = gson.toJson(combinedData);
 
@@ -374,6 +373,205 @@ public class ClientThread implements Runnable {
                         System.out.println("Response object for GETCLIENTSDEPOSIT: " + response);
                         break;
                     }
+                    case GETMYDEPOSITS: {
+                        System.out.println("Incoming requestMessage: " + request.getRequestMessage());
+
+                        ClientIdRequest requestObject = gson.fromJson(request.getRequestMessage(), ClientIdRequest.class);
+
+                        int clientId = requestObject.getClientId();
+
+                        System.out.println("Extracted clientId: " + clientId);
+
+                        List<JoinMyDepositsDTO> combinedData = clientsDepositsService.getMyDeposits(clientId);
+
+                        if (combinedData != null && !combinedData.isEmpty()) {
+                            String depositsJson = gson.toJson(combinedData);
+
+                            response = new Response(ResponseStatus.OK, "Deposits retrieved successfully.", depositsJson);
+                        } else {
+                            response = new Response(ResponseStatus.OK, "No deposits found.", "[]");
+                        }
+
+                        System.out.println("Response object for GETMYDEPOSITS: " + response);
+                        break;
+                    }
+                    case CLOSEDEPOSIT: {
+                        JsonObject jsonObject = gson.fromJson(request.getRequestMessage(), JsonObject.class);
+                        System.out.println("Полученные данные: " + jsonObject);
+
+                        String nameDeposit = jsonObject.get("nameDeposit").getAsString();
+                        int idDeposit = jsonObject.get("idDeposit").getAsInt();
+
+                        System.out.println("Запрос на закрытие депозита с ID: " + idDeposit);
+
+                        try {
+                            ClientsDeposits existingRequest = clientsDepositsService.findByIdDeposit(idDeposit, nameDeposit);
+                            if (existingRequest == null) {
+                                throw new IllegalArgumentException("Связь депозита и клиента не найдена для idDeposit: " + idDeposit + " и nameDeposit: " + nameDeposit);
+                            }
+
+                            existingRequest.setOpen(false);
+                            existingRequest.setOpeningDate(null);
+                            existingRequest.setFirstAmount(0);
+
+                            clientsDepositsService.updateEntity(existingRequest);
+                            ClientsDepositsDTO existingRequest1 = new ClientsDepositsDTO(existingRequest);
+
+                            response = new Response(
+                                    ResponseStatus.OK,
+                                    "Депозит успешно закрыт!",
+                                    gson.toJson(existingRequest1)
+                            );
+                            System.out.println("Депозит успешно закрыт: " + existingRequest1);
+
+                        } catch (IllegalArgumentException e) {
+                            response = new Response(ResponseStatus.ERROR, "Ошибка: " + e.getMessage());
+                            System.out.println("Ошибка: " + e.getMessage());
+                        } catch (Exception e) {
+                            response = new Response(ResponseStatus.ERROR, "Ошибка сервера при обработке запроса.");
+                            System.err.println("Серверная ошибка: " + e.getMessage());
+                        }
+
+                        break;
+                    }
+                    case ASKQUESTION: {
+                        try {
+                            Question question = gson.fromJson(request.getRequestMessage(), Question.class);
+                            System.out.println("Полученный вопрос: " + question);
+
+                            if (question.getClient() == null || question.getClient().getId() == 0) {
+                                response = new Response(ResponseStatus.ERROR, "Client information is missing or invalid.");
+                                break;
+                            }
+
+                            int userid = question.getClient().getId();
+                            System.out.println("user id: " + userid);
+                            User user = userService.findEntity(userid);
+                            Client client = user.getClient();
+                            if (client == null) {
+                                response = new Response(ResponseStatus.ERROR, "Client not found with ID: " + client.getId());
+                                break;
+                            }
+                            System.out.println("clientid: " +  client.getId());
+
+                            question.setClient(client);
+
+                            questionService.saveEntity(question);
+
+                            Question returnQuestion = questionService.findEntity(question.getQuestionid());
+                            QuestionDTO questionRequest = new QuestionDTO(returnQuestion);
+                            response = new Response(ResponseStatus.OK, "Question added successfully.", gson.toJson(questionRequest));
+                            System.out.println("Ответ отправлен: " + response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            response = new Response(ResponseStatus.ERROR, "Failed to process the request: " + e.getMessage());
+                        }
+                        break;
+                    }
+                    case GETQUESTIONS:{
+                        System.out.println("Incoming requestMessage: " + request.getRequestMessage());
+
+                        ClientIdRequest requestObject = gson.fromJson(request.getRequestMessage(), ClientIdRequest.class);
+
+                        int clientId = requestObject.getClientId();
+
+                        System.out.println("Extracted clientId: " + clientId);
+
+                        List<QuestionDTO> myQuestions = questionService.getMyQuestion(clientId);
+
+                        if (myQuestions != null && !myQuestions.isEmpty()) {
+                            String depositsJson = gson.toJson(myQuestions);
+
+                            response = new Response(ResponseStatus.OK, "Deposits retrieved successfully.", depositsJson);
+                        } else {
+                            response = new Response(ResponseStatus.OK, "No deposits found.", "[]");
+                        }
+
+                        System.out.println("Response object for GETMYDEPOSITS: " + response);
+                        break;
+                    }
+                    case GETALLQUESTIONS:{
+                        System.out.println("Incoming requestMessage: " + request.getRequestMessage());
+
+                        List<Question> myQuestions = questionService.findAllEntities();
+                        List<QuestionDTO> questionDTOs = myQuestions.stream()
+                                .filter(question -> question.getAnswer() == null)
+                                .map(question -> new QuestionDTO(
+                                        question.getQuestionid(),
+                                        question.getText(),
+                                        question.getAnswer()
+                                ))
+                                .collect(Collectors.toList());
+
+
+
+                        if (questionDTOs != null && !questionDTOs.isEmpty()) {
+                            String depositsJson = gson.toJson(questionDTOs);
+
+                            response = new Response(ResponseStatus.OK, "Deposits retrieved successfully.", depositsJson);
+                        } else {
+                            response = new Response(ResponseStatus.OK, "No deposits found.", "[]");
+                        }
+
+                        System.out.println("Response object for GETMYDEPOSITS: " + response);
+                        break;
+                    }
+                    case UNSWERQUESTION: {
+                        try {
+                            JsonObject requestMessage = gson.fromJson(request.getRequestMessage(), JsonObject.class);
+
+                            int questionId = requestMessage.get("questionId").getAsInt();
+                            String answerText = requestMessage.get("responseMessage").getAsString();
+
+                            Question existingQuestion = questionService.findEntity(questionId);
+                            if (existingQuestion == null) {
+                                response = new Response(ResponseStatus.ERROR, "Вопрос с указанным ID не найден.");
+                                break;
+                            }
+
+                            existingQuestion.setAnswer(answerText);
+
+                            questionService.updateEntity(existingQuestion);
+
+                            QuestionDTO updatedQuestion = new QuestionDTO(existingQuestion);
+
+                            response = new Response(ResponseStatus.OK, "Ответ успешно добавлен.", gson.toJson(updatedQuestion));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            response = new Response(ResponseStatus.ERROR, "Ошибка при обработке запроса: " + e.getMessage());
+                        }
+                        break;
+                    }
+                    case UPDATE_NOTIFICATIONS: {
+                        try {
+                            // Попытка разобрать requestMessage как массив JSON
+                            JsonArray requestArray = gson.fromJson(request.getRequestMessage(), JsonArray.class);
+
+                            for (JsonElement element : requestArray) {
+                                JsonObject requestMessage = element.getAsJsonObject();
+
+                                int notificationId = requestMessage.get("id").getAsInt();
+
+                                Notifications updateStatus = notificationService.findEntity(notificationId);
+                                if (updateStatus == null) {
+                                    System.err.println("Уведомление с ID " + notificationId + " не найдено.");
+                                    continue;
+                                }
+                                updateStatus.setRead(true);
+                                notificationService.updateEntity(updateStatus);
+                            }
+
+                            response = new Response(ResponseStatus.OK, "Статусы уведомлений успешно обновлены.");
+                        } catch (JsonSyntaxException e) {
+                            e.printStackTrace();
+                            response = new Response(ResponseStatus.ERROR, "Ошибка в структуре JSON: " + e.getMessage());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            response = new Response(ResponseStatus.ERROR, "Ошибка при обработке запроса: " + e.getMessage());
+                        }
+                        break;
+                    }
+
 
                     default:
                         response = new Response(ResponseStatus.ERROR, "Unknown request type.");

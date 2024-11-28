@@ -47,6 +47,7 @@
         <mapping class="server.Models.Entities.Notifications"/>
         <mapping class="server.Models.Entities.Admin"/>
         <mapping class="server.Models.Entities.ClientsDeposits"/>
+        <mapping class="server.Models.Entities.Question"/>
 
     </session-factory>
 </hibernate-configuration>

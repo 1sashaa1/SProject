@@ -15,13 +15,7 @@ public class ClientService implements Service<Client> {
 
     @Override
     public Client findEntity(int id) {
-        Client entity = (Client) daoService.findById(id);
-        if (entity.getUsers() != null) {
-            // что-нибудь ещё добавить
-            //////entity.getUsers().;
-            /////////////
-        }
-        return null;
+        return (Client) daoService.findById(id);
     }
 
     @Override

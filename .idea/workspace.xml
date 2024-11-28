@@ -4,18 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ca17c775-5022-47b7-87cf-d2ce175f9528" name="Changes" comment="Request to open deposits">
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/ClientsDepositsDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/DepositDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/JoinClientsDepositsDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Utility/HibernateUtil.java" afterDir="false" />
+    <list default="true" id="ca17c775-5022-47b7-87cf-d2ce175f9528" name="Changes" comment="Employee closes/opens a deposit">
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/DataAccessObjects/QuestionDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/ClientIdRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/JoinMyDepositsDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/QuestionDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Question.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Services/QuestionService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/server/Enums/RequestType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Enums/RequestType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/server/Models/DTO/UserDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/UserDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/server/Models/Entities/ClientsDeposits.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/ClientsDeposits.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Deposit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Deposit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/server/Services/ClientService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Services/ClientService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/server/Services/ClientsDepositsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Services/ClientsDepositsService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/server/Utility/ClientThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Utility/ClientThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,7 +64,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/course 3/Курсовой проект/MyProject/CProject&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/course 3/СТРweb-пр/JDBC/MyDB&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -80,6 +83,26 @@
     ]
   }
 }</component>
+  <component name="RunManager">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="server.Main" />
+      <module name="SProject" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="server.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -166,6 +189,26 @@
       <workItem from="1731832488435" duration="24959000" />
       <workItem from="1731935071168" duration="3523000" />
       <workItem from="1731961015793" duration="1016000" />
+      <workItem from="1731970069568" duration="423000" />
+      <workItem from="1731971096012" duration="147000" />
+      <workItem from="1732006874803" duration="3787000" />
+      <workItem from="1732030338315" duration="633000" />
+      <workItem from="1732107141167" duration="6000" />
+      <workItem from="1732193753985" duration="707000" />
+      <workItem from="1732211698518" duration="1420000" />
+      <workItem from="1732224622365" duration="628000" />
+      <workItem from="1732264044162" duration="863000" />
+      <workItem from="1732531240142" duration="3605000" />
+      <workItem from="1732543765962" duration="445000" />
+      <workItem from="1732552961567" duration="8617000" />
+      <workItem from="1732605619719" duration="6857000" />
+      <workItem from="1732625310646" duration="6893000" />
+      <workItem from="1732643151744" duration="1001000" />
+      <workItem from="1732644172871" duration="6097000" />
+      <workItem from="1732720038228" duration="9241000" />
+      <workItem from="1732736494006" duration="5866000" />
+      <workItem from="1732778344628" duration="13175000" />
+      <workItem from="1732810587239" duration="1378000" />
     </task>
     <task id="LOCAL-00001" summary="Create commit">
       <option name="closed" value="true" />
@@ -191,7 +234,15 @@
       <option name="project" value="LOCAL" />
       <updated>1731776476701</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Employee closes/opens a deposit">
+      <option name="closed" value="true" />
+      <created>1731970105283</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1731970105283</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -201,6 +252,7 @@
     <MESSAGE value="Create commit" />
     <MESSAGE value="Employee deposit and notification" />
     <MESSAGE value="Request to open deposits" />
-    <option name="LAST_COMMIT_MESSAGE" value="Request to open deposits" />
+    <MESSAGE value="Employee closes/opens a deposit" />
+    <option name="LAST_COMMIT_MESSAGE" value="Employee closes/opens a deposit" />
   </component>
 </project>

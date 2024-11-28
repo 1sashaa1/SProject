@@ -49,7 +49,10 @@ public class Client implements Serializable {
     private Set<User> users = new HashSet<>();
 
     @OneToMany(mappedBy = "client", orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<ClientsDeposits> clientsDeposits;
+    private Set<ClientsDeposits> clientsDeposits;
+
+    @OneToMany(mappedBy = "client", orphanRemoval = true, fetch = FetchType.EAGER)
+    private Set<Question> questions;
 
     public Client() {
     }
