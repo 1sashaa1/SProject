@@ -1,6 +1,7 @@
 package server.Utility;
 
 import com.google.gson.*;
+import org.hibernate.NonUniqueObjectException;
 import server.DataAccessObjects.NotificationsDAO;
 import server.Enums.ResponseStatus;
 import server.Models.DTO.*;
@@ -14,12 +15,20 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 public class ClientThread implements Runnable {
     private Socket clientSocket;
@@ -35,6 +44,9 @@ public class ClientThread implements Runnable {
     private NotificationService notificationService = new NotificationService();
     private ClientsDepositsService clientsDepositsService = new ClientsDepositsService();
     private QuestionService questionService = new QuestionService();
+    private EmployeeService employeeService = new EmployeeService();
+    private OperationService operationService = new OperationService();
+    private PercentService percentService = new PercentService();
     NotificationsDAO notificationsDAO = new NotificationsDAO();
     NotificationService notificationService1 = new NotificationService(notificationsDAO);
     // добавить другие
@@ -49,25 +61,39 @@ public class ClientThread implements Runnable {
     }
 
     private Client convertDtoToClient(ClientDTO clientDTO) {
-        return new Client(clientDTO.getId());
+        if (clientDTO == null) {
+            return null;
+        }
+        Client client = new Client();
+        client.setId(clientDTO.getId());
+        client.setName(clientDTO.getName());
+        client.setSurname(clientDTO.getSurname());
+        client.setPatronymic(clientDTO.getPatronymic());
+//        client.setDob(clientDTO.getDob());
+        client.setCitizenship(clientDTO.getCitizenship());
+        client.setDocumentType(clientDTO.getDocumentType());
+        client.setIdNumber(clientDTO.getIdNumber());
+        client.setDocumentNumber(clientDTO.getDocumentNumber());
+        client.setEmail(clientDTO.getEmail());
+        client.setCitizenship(clientDTO.getCitizenship());
+        return client;
     }
 
     @Override
     public void run() {
         try {
-            while (clientSocket.isConnected()) {
+            while (!clientSocket.isClosed()) {
                 String message = in.readLine();
-
                 if (message == null) {
-                    // Клиент закрыл соединение
+                    System.out.println("Клиент отключился");
                     break;
                 }
 
                 Gson gson = new GsonBuilder()
                         .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
+                        .registerTypeAdapter(Date.class, new CustomDateAdapter())
                         //.excludeFieldsWithoutExposeAnnotation()
                         .create();
-
 
                 Request request = gson.fromJson(message, Request.class);
                 System.out.println("Запрос: " + request.getRequestType());
@@ -77,8 +103,11 @@ public class ClientThread implements Runnable {
                         System.out.println("Полученный пользователь:" + request.getRequestMessage());
 
                         if (userService.findAllEntities().stream().noneMatch(x -> x.getLogin().equalsIgnoreCase(user.getLogin()))) {
-                            clientService.saveEntity(user.getClient());
+                            if (user.getClient() != null && user.getClient().getEmployee() == null) {
+                                clientService.saveEntity(user.getClient());
+                            }
                             userService.saveEntity(user);
+
                             userService.findAllEntities();
                             User returnUser;
                             returnUser = userService.findEntity(user.getId());
@@ -214,6 +243,7 @@ public class ClientThread implements Runnable {
                         System.out.println("Полученная рассылка: " + notification);
                         break;
                     }
+
                     case GETNOTIFICATIONS: {
 
                         int clientId = gson.fromJson(request.getRequestMessage(), Integer.class);
@@ -232,6 +262,7 @@ public class ClientThread implements Runnable {
                         response = new Response(ResponseStatus.OK, "Notifications retrieved successfully.", notificationsJson);
                         break;
                     }
+
                     case EOPENDEPOSIT: {
                         try {
                             JsonObject jsonObject = gson.fromJson(request.getRequestMessage(), JsonObject.class);
@@ -264,14 +295,13 @@ public class ClientThread implements Runnable {
                                     monthTranslations.put("нояб.", "Nov");
                                     monthTranslations.put("дек.", "Dec");
 
-                                    // Заменяем русские месяцы на английские
                                     for (Map.Entry<String, String> entry : monthTranslations.entrySet()) {
                                         openingDateStr = openingDateStr.replace(entry.getKey(), entry.getValue());
                                     }
 
                                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d, yyyy", Locale.ENGLISH);
                                     LocalDate date = LocalDate.parse(openingDateStr, formatter);
-                                    openingDate = Date.valueOf(date); // Сохраняем преобразованную дату
+                                    openingDate = Date.valueOf(date);
                                 } catch (DateTimeParseException e) {
                                     throw new IllegalArgumentException("Неверный формат даты: " + openingDateStr, e);
                                 }
@@ -284,22 +314,26 @@ public class ClientThread implements Runnable {
                                     ", Открыт: " + isOpen +
                                     ", idDeposit: " + idDeposit);
 
-                            // Проверяем существование депозита
                             ClientsDeposits existingDeposit = clientsDepositsService.findByIdDeposit(idDeposit, nameDeposit);
                             if (existingDeposit == null) {
                                 throw new IllegalArgumentException("Депозит с именем \"" + nameDeposit + "\" для клиента с ID " + idDeposit + " не найден.");
                             }
 
-
-                            // Обновляем поля
                             existingDeposit.setOpen(isOpen);
                             existingDeposit.setFirstAmount(firstAmount);
                             existingDeposit.setOpeningDate(openingDate);
                             System.out.println("Данные депозита успешно установлены: " + existingDeposit);
                             clientsDepositsService.updateEntity(existingDeposit);
                             ClientsDepositsDTO existingDeposit1 = new ClientsDepositsDTO(existingDeposit);
-                            // Сохраняем изменения
                             System.out.println("Данные депозита успешно обновлены: " + existingDeposit);
+
+                            String fileName = "deposit_data.txt";
+                            String fileData = "ID Депозита: " + idDeposit +
+                                    ", Имя депозита: " + nameDeposit +
+                                    ", Сумма: " + existingDeposit.getFirstAmount() +
+                                    ", Дата открытия: " + existingDeposit.getOpeningDate() +
+                                    ", Открыт: " + existingDeposit.isOpen() + System.lineSeparator();
+                            writeToFile(fileName, fileData);
 
                             response = new Response(
                                     ResponseStatus.OK,
@@ -339,6 +373,14 @@ public class ClientThread implements Runnable {
 
                             clientsDepositsService.updateEntity(existingRequest);
                             ClientsDepositsDTO existingRequest1 = new ClientsDepositsDTO(existingRequest);
+
+                            String fileName = "deposit_data.txt";
+                            String fileData = "ID Депозита: " + idDeposit +
+                                    ", Имя депозита: " + nameDeposit +
+                                    ", Сумма: " + existingRequest.getFirstAmount() +
+                                    ", Дата открытия: " + existingRequest.getOpeningDate() +
+                                    ", Открыт: " + existingRequest.isOpen() + System.lineSeparator();
+                            writeToFile(fileName, fileData);
 
                             response = new Response(
                                     ResponseStatus.OK,
@@ -395,45 +437,7 @@ public class ClientThread implements Runnable {
                         System.out.println("Response object for GETMYDEPOSITS: " + response);
                         break;
                     }
-                    case CLOSEDEPOSIT: {
-                        JsonObject jsonObject = gson.fromJson(request.getRequestMessage(), JsonObject.class);
-                        System.out.println("Полученные данные: " + jsonObject);
 
-                        String nameDeposit = jsonObject.get("nameDeposit").getAsString();
-                        int idDeposit = jsonObject.get("idDeposit").getAsInt();
-
-                        System.out.println("Запрос на закрытие депозита с ID: " + idDeposit);
-
-                        try {
-                            ClientsDeposits existingRequest = clientsDepositsService.findByIdDeposit(idDeposit, nameDeposit);
-                            if (existingRequest == null) {
-                                throw new IllegalArgumentException("Связь депозита и клиента не найдена для idDeposit: " + idDeposit + " и nameDeposit: " + nameDeposit);
-                            }
-
-                            existingRequest.setOpen(false);
-                            existingRequest.setOpeningDate(null);
-                            existingRequest.setFirstAmount(0);
-
-                            clientsDepositsService.updateEntity(existingRequest);
-                            ClientsDepositsDTO existingRequest1 = new ClientsDepositsDTO(existingRequest);
-
-                            response = new Response(
-                                    ResponseStatus.OK,
-                                    "Депозит успешно закрыт!",
-                                    gson.toJson(existingRequest1)
-                            );
-                            System.out.println("Депозит успешно закрыт: " + existingRequest1);
-
-                        } catch (IllegalArgumentException e) {
-                            response = new Response(ResponseStatus.ERROR, "Ошибка: " + e.getMessage());
-                            System.out.println("Ошибка: " + e.getMessage());
-                        } catch (Exception e) {
-                            response = new Response(ResponseStatus.ERROR, "Ошибка сервера при обработке запроса.");
-                            System.err.println("Серверная ошибка: " + e.getMessage());
-                        }
-
-                        break;
-                    }
                     case ASKQUESTION: {
                         try {
                             Question question = gson.fromJson(request.getRequestMessage(), Question.class);
@@ -452,7 +456,7 @@ public class ClientThread implements Runnable {
                                 response = new Response(ResponseStatus.ERROR, "Client not found with ID: " + client.getId());
                                 break;
                             }
-                            System.out.println("clientid: " +  client.getId());
+                            System.out.println("clientid: " + client.getId());
 
                             question.setClient(client);
 
@@ -468,7 +472,7 @@ public class ClientThread implements Runnable {
                         }
                         break;
                     }
-                    case GETQUESTIONS:{
+                    case GETQUESTIONS: {
                         System.out.println("Incoming requestMessage: " + request.getRequestMessage());
 
                         ClientIdRequest requestObject = gson.fromJson(request.getRequestMessage(), ClientIdRequest.class);
@@ -490,7 +494,7 @@ public class ClientThread implements Runnable {
                         System.out.println("Response object for GETMYDEPOSITS: " + response);
                         break;
                     }
-                    case GETALLQUESTIONS:{
+                    case GETALLQUESTIONS: {
                         System.out.println("Incoming requestMessage: " + request.getRequestMessage());
 
                         List<Question> myQuestions = questionService.findAllEntities();
@@ -502,7 +506,6 @@ public class ClientThread implements Runnable {
                                         question.getAnswer()
                                 ))
                                 .collect(Collectors.toList());
-
 
 
                         if (questionDTOs != null && !questionDTOs.isEmpty()) {
@@ -571,37 +574,483 @@ public class ClientThread implements Runnable {
                         }
                         break;
                     }
+                    case DELETECLIENT: {
+                        Client clientToDelete = gson.fromJson(request.getRequestMessage(), Client.class);
+                        System.out.println("Клиент на удаление: " + clientToDelete);
 
+                        Client existingClient = clientService.findEntity(clientToDelete.getId());
+                        if (existingClient != null) {
+                            clientService.deleteEntity(existingClient);
+                            response = new Response(ResponseStatus.OK, "Client deleted successfully.");
+                            System.out.println("Клиент удалён: " + existingClient);
+                        } else {
+                            response = new Response(ResponseStatus.ERROR, "Client not found.");
+                            System.out.println("Ошибка: клиент не найден.");
+                        }
+                        break;
+                    }
+
+                    case UPDATECLIENT: {
+                        // Извлечение обновлённых данных клиента из запроса
+                        Client updatedClient = gson.fromJson(request.getRequestMessage(), Client.class);
+                        System.out.println("Обновлённые данные клиента: " + updatedClient);
+
+                        // Проверка, существует ли клиент в базе данных
+                        Client existingClient = clientService.findEntity(updatedClient.getId());
+                        if (existingClient != null) {
+                            // Обновление данных клиента
+                            existingClient.setName(updatedClient.getName());
+                            existingClient.setSurname(updatedClient.getSurname());
+                            existingClient.setPatronymic(updatedClient.getPatronymic());
+                            existingClient.setDob(updatedClient.getDob());
+                            existingClient.setCitizenship(updatedClient.getCitizenship());
+                            existingClient.setDocumentType(updatedClient.getDocumentType());
+                            existingClient.setIdNumber(updatedClient.getIdNumber());
+                            existingClient.setDocumentNumber(updatedClient.getDocumentNumber());
+                            existingClient.setEmail(updatedClient.getEmail());
+
+                            // Сохранение изменений
+                            clientService.updateEntity(existingClient);
+
+                            ClientDTO existingClient1 = new ClientDTO(existingClient);
+
+                            response = new Response(ResponseStatus.OK, "Client updated successfully.", gson.toJson(existingClient1));
+                            System.out.println("Клиент обновлён: " + existingClient);
+                        } else {
+                            response = new Response(ResponseStatus.ERROR, "Client not found.");
+                            System.out.println("Ошибка: клиент не найден.");
+                        }
+                        break;
+                    }
+                    case GETTRUECLIENTS: {
+                        List<Client> allClients = clientService.findAllEntities();
+                        List<ClientDTO> clientDTOs = allClients.stream()
+                                .map(ClientDTO::new)
+                                .collect(Collectors.toList());
+
+                        String clientsJson = gson.toJson(clientDTOs);
+                        System.out.println("клиент json: " + clientsJson);
+
+                        response = new Response(ResponseStatus.OK, "Clients retrieved successfully.", clientsJson);
+                        break;
+                    }
+                    case DELETEEMPLOYEE: {
+                        EmployeeClientDTO employeeToDelete = gson.fromJson(request.getRequestMessage(), EmployeeClientDTO.class);
+                        System.out.println("Сотрудник на удаление: " + employeeToDelete);
+
+                        Employee existingEmp = employeeService.findEntity(employeeToDelete.getIdE());
+                        if (existingEmp != null) {
+                            employeeService.deleteEntity(existingEmp);
+                            EmployeeDTO existingEmp1 = new EmployeeDTO(existingEmp);
+                            response = new Response(ResponseStatus.OK, "Employee deleted successfully.");
+                            System.out.println("Сотрудник удалён: " + existingEmp1);
+                        } else {
+                            response = new Response(ResponseStatus.ERROR, "Emp not found.");
+                            System.out.println("Ошибка: сотрудник не найден.");
+                        }
+                        break;
+                    }
+                    case UPDATEEMPLOYEE: {
+                        EmployeeClientDTO updatedEmpDTO = gson.fromJson(request.getRequestMessage(), EmployeeClientDTO.class);
+                        System.out.println("Обновление данных сотрудника: " + updatedEmpDTO);
+
+                        Employee existingEmp = employeeService.findEntity(updatedEmpDTO.getIdE());
+                        if (existingEmp != null) {
+                            existingEmp.setSeat(updatedEmpDTO.getSeat());
+                            existingEmp.getClient().setName(updatedEmpDTO.getName());
+                            existingEmp.getClient().setSurname(updatedEmpDTO.getSurname());
+                            existingEmp.getClient().setPatronymic(updatedEmpDTO.getPatronymic());
+                            existingEmp.getClient().setEmail(updatedEmpDTO.getEmail());
+                            existingEmp.getClient().setDob(updatedEmpDTO.getDob());
+                            existingEmp.getClient().setCitizenship(updatedEmpDTO.getCitizenship());
+                            existingEmp.getClient().setDocumentType(updatedEmpDTO.getDocumentType());
+                            existingEmp.getClient().setIdNumber(updatedEmpDTO.getIdNumber());
+                            existingEmp.getClient().setDocumentNumber(updatedEmpDTO.getDocumentNumber());
+
+                            employeeService.updateEntity(existingEmp);
+
+                            EmployeeDTO existingEmp1 = new EmployeeDTO(existingEmp);
+
+                            response = new Response(ResponseStatus.OK, "Employee updated successfully.");
+                            System.out.println("Данные сотрудника обновлены: " + existingEmp1);
+                        } else {
+                            response = new Response(ResponseStatus.ERROR, "Employee not found.");
+                            System.out.println("Ошибка: сотрудник не найден.");
+                        }
+                        break;
+                    }
+
+                    case CREATEEMPLOYEE: {
+                        User user = gson.fromJson(request.getRequestMessage(), User.class);
+                        System.out.println("Полученный пользователь:" + request.getRequestMessage());
+
+                        if (userService.findAllEntities().stream().noneMatch(x -> x.getLogin().equalsIgnoreCase(user.getLogin()))) {
+
+                            Client client = user.getClient();
+
+                            if (client != null) {
+                                Employee employee = client.getEmployee();
+
+                                if (employee != null) {
+                                    employee.setClient(client);
+                                    client.setEmployee(employee);
+                                }
+                                clientService.saveEntity(client);
+                            }
+                            userService.saveEntity(user);
+
+                            userService.findAllEntities();
+                            User returnUser;
+                            returnUser = userService.findEntity(user.getId());
+                            UserDTO returnU = new UserDTO(returnUser);
+                            System.out.println("ID: " + user.getId());
+                            response = new Response(ResponseStatus.OK, "User registered successfully.", gson.toJson(returnU));
+                            System.out.println("Response object: " + response);
+                            System.out.println("Полученный пользователь" + user);
+
+                        } else {
+                            response = new Response(ResponseStatus.ERROR, "User already exists.");
+                        }
+                        break;
+                    }
+
+                    case GETTRUEEMPLOYEES: {
+                        System.out.println("Получение всех сотрудников.");
+                        List<Employee> employees = employeeService.findAllEntities();
+                        if (employees != null && !employees.isEmpty()) {
+                            List<EmployeeClientDTO> employeeDTOs = employees.stream()
+                                    .map(emp -> new EmployeeClientDTO(
+                                            emp.getClient().getEmail(),
+                                            emp.getClient().getName(),
+                                            emp.getClient().getSurname(),
+                                            emp.getClient().getPatronymic(),
+                                            emp.getClient().getDob(),
+                                            emp.getClient().getCitizenship(),
+                                            emp.getClient().getDocumentType(),
+                                            emp.getClient().getIdNumber(),
+                                            emp.getClient().getDocumentNumber(),
+                                            emp.getIdemployee(),
+                                            emp.getSeat()))
+                                    .toList();
+                            response = new Response(ResponseStatus.OK, gson.toJson(employeeDTOs));
+                            System.out.println("Список сотрудников отправлен клиенту.");
+                        } else {
+                            response = new Response(ResponseStatus.ERROR, "No employees found.");
+                            System.out.println("Ошибка: сотрудники не найдены.");
+                        }
+                        break;
+                    }
+                    case OPENDEPOSIT: {
+                        try {
+                            JsonObject jsonObject = gson.fromJson(request.getRequestMessage(), JsonObject.class);
+                            int depositId = jsonObject.get("depositId").getAsInt();
+                            int clientId = jsonObject.get("clientId").getAsInt();
+                            double initialAmount = jsonObject.get("initialAmount").getAsDouble();
+
+                            System.out.println("Запрос на открытие депозита с ID: " + depositId +
+                                    ", клиент ID: " + clientId + ", сумма: " + initialAmount);
+
+                            // Проверка на существование депозита
+                            Deposit depositToOpen = depositService.findEntity(depositId);
+                            if (depositToOpen == null) {
+                                response = new Response(ResponseStatus.ERROR, "Депозит с ID " + depositId + " не найден.");
+                                break;
+                            }
+
+                            // Проверка минимальной суммы
+                            if (initialAmount < depositToOpen.getMinAmount()) {
+                                response = new Response(ResponseStatus.ERROR,
+                                        "Сумма меньше минимальной для депозита. Минимум: " + depositToOpen.getMinAmount());
+                                break;
+                            }
+
+                            // Поиск пользователя и клиента
+                            Optional<User> optionalUser = userService.findAllEntities().stream()
+                                    .filter(u -> u.getClient() != null && u.getId() == clientId)
+                                    .findFirst();
+
+                            if (optionalUser.isEmpty()) {
+                                response = new Response(ResponseStatus.ERROR, "Пользователь с ID " + clientId + " не найден.");
+                                break;
+                            }
+
+                            Client client = optionalUser.get().getClient();
+                            if (client == null) {
+                                response = new Response(ResponseStatus.ERROR, "Клиент для пользователя с ID " + clientId + " не найден.");
+                                break;
+                            }
+
+                            // Создание записи о запросе на открытие депозита
+                            ClientsDeposits newRequest = new ClientsDeposits();
+                            newRequest.setDeposit(depositToOpen);
+                            newRequest.setClient(client);
+                            newRequest.setOpen(false); // По умолчанию запрос не открыт
+                            newRequest.setFirstAmount(0.0);
+                            newRequest.setOpeningDate(null);
+
+                            clientsDepositsService.saveEntity(newRequest);
+
+                            // Создание операции
+                            Operation operation = new Operation();
+                            operation.setDeposit(depositToOpen);
+                            operation.setClient(client);
+                            operation.setDateSend(new Date(System.currentTimeMillis()));
+                            operation.setType("open");
+                            operation.setSum(initialAmount);
+
+                            try {
+                                operationService.saveEntity(operation);
+                                OperationDTO operationDTO = new OperationDTO(operation);
+
+                                response = new Response(ResponseStatus.OK,
+                                        "Запрос на открытие депозита успешно сохранён!", gson.toJson(operationDTO));
+                            } catch (NonUniqueObjectException e) {
+                                response = new Response(ResponseStatus.ERROR,
+                                        "Запрос на открытие депозита уже существует: " + e.getMessage());
+                                System.err.println("Ошибка: " + e.getMessage());
+                            }
+                        } catch (Exception e) {
+                            response = new Response(ResponseStatus.ERROR,
+                                    "Ошибка при обработке запроса на открытие депозита: " + e.getMessage());
+                            e.printStackTrace();
+                        }
+                        break;
+                    }
+
+
+                    case CLOSEDEPOSIT: {
+                        JsonObject jsonObject = gson.fromJson(request.getRequestMessage(), JsonObject.class);
+                        System.out.println("Полученные данные: " + jsonObject);
+
+                        int depositId = jsonObject.get("depositId").getAsInt();
+                        int clientId = jsonObject.get("clientId").getAsInt();
+                        System.out.println("Запрос на закрытие депозита с ID: " + depositId);
+
+                        try {
+                            ClientsDeposits existingRequest = clientsDepositsService.findEntity(depositId);
+                            if (existingRequest == null) {
+                                throw new IllegalArgumentException("Связь депозита и клиента не найдена для idDeposit: " + depositId);
+                            }
+
+                            Deposit deposit = depositService.findEntity(existingRequest.getDeposit().getId());
+                            List<Percent> percent = percentService.findAllEntities();
+                            if (percent.isEmpty()) {
+                                throw new IllegalArgumentException("Список начислений пуст!");
+                            }
+
+                            int idDepositToFilter = existingRequest.getIdDeposit();
+
+                            Optional<Percent> lastFound = percent.stream()
+                                    .filter(p -> p.getClientsDeposits() != null
+                                            && p.getClientsDeposits().getIdDeposit() == idDepositToFilter)
+                                    .reduce((first, second) -> second);
+
+                            double sumToSet = lastFound.map(Percent::getSum).orElse(existingRequest.getFirstAmount());
+
+                            if (sumToSet <= 0) {
+                                throw new IllegalArgumentException("Не удалось определить сумму для закрытия депозита.");
+                            }
+
+                            Optional<User> optionalUser = userService.findAllEntities().stream()
+                                    .filter(u -> u.getClient() != null && u.getId() == clientId)
+                                    .findFirst();
+
+                            if (optionalUser.isEmpty()) {
+                                throw new IllegalArgumentException("Пользователь с ID " + clientId + " не найден.");
+                            }
+
+                            Client clientOp = clientService.findEntity(optionalUser.get().getClient().getId());
+                            if (clientOp == null) {
+                                throw new IllegalArgumentException("Клиент не найден для ID: " + optionalUser.get().getClient().getId());
+                            }
+
+                            Operation newRequest1 = new Operation();
+                            newRequest1.setDeposit(deposit);
+                            newRequest1.setClient(clientOp);
+                            newRequest1.setDateSend(new Date(System.currentTimeMillis()));
+                            newRequest1.setType("close");
+                            newRequest1.setSum(sumToSet);
+
+                            operationService.saveEntity(newRequest1);
+
+                            ClientsDeposits managedRequest = clientsDepositsService.findEntity(existingRequest.getIdDeposit());
+                            managedRequest.setOpen(false);
+                            managedRequest.setOpeningDate(null);
+                            managedRequest.setFirstAmount(0);
+                            clientsDepositsService.updateEntity(managedRequest);
+
+                            ClientsDepositsDTO existingRequest1 = new ClientsDepositsDTO(managedRequest);
+
+                            response = new Response(
+                                    ResponseStatus.OK,
+                                    "Депозит успешно закрыт!",
+                                    gson.toJson(existingRequest1)
+                            );
+                            System.out.println("Депозит успешно закрыт: " + existingRequest1);
+
+                        } catch (IllegalArgumentException e) {
+                            response = new Response(ResponseStatus.ERROR, "Ошибка: " + e.getMessage());
+                            e.printStackTrace();
+                        } catch (Exception e) {
+                            response = new Response(ResponseStatus.ERROR, "Ошибка сервера при обработке запроса.");
+                            e.printStackTrace();
+                        }
+
+
+                        break;
+                    }
+                    case PROLONGDEPOSIT: {
+                        try {
+                            JsonObject jsonObject = gson.fromJson(request.getRequestMessage(), JsonObject.class);
+                            int depositId = jsonObject.get("depositId").getAsInt();
+                            int clientId = jsonObject.get("clientId").getAsInt();
+                            double initialAmount = jsonObject.get("initialAmount").getAsDouble();
+
+                            System.out.println("Запрос на открытие депозита с ID: " + depositId +
+                                    ", клиент ID: " + clientId + ", сумма: " + initialAmount);
+
+                            // Проверка на существование депозита
+                            Deposit depositToOpen = depositService.findEntity(depositId);
+                            if (depositToOpen == null) {
+                                response = new Response(ResponseStatus.ERROR, "Депозит с ID " + depositId + " не найден.");
+                                break;
+                            }
+
+                            // Проверка минимальной суммы
+                            if (initialAmount < depositToOpen.getMinAmount()) {
+                                response = new Response(ResponseStatus.ERROR,
+                                        "Сумма меньше минимальной для депозита. Минимум: " + depositToOpen.getMinAmount());
+                                break;
+                            }
+
+                            // Поиск пользователя и клиента
+                            Optional<User> optionalUser = userService.findAllEntities().stream()
+                                    .filter(u -> u.getClient() != null && u.getId() == clientId)
+                                    .findFirst();
+
+                            if (optionalUser.isEmpty()) {
+                                response = new Response(ResponseStatus.ERROR, "Пользователь с ID " + clientId + " не найден.");
+                                break;
+                            }
+
+                            Client client = optionalUser.get().getClient();
+                            if (client == null) {
+                                response = new Response(ResponseStatus.ERROR, "Клиент для пользователя с ID " + clientId + " не найден.");
+                                break;
+                            }
+
+                            // Создание записи о запросе на открытие депозита
+                            ClientsDeposits newRequest = new ClientsDeposits();
+                            newRequest.setDeposit(depositToOpen);
+                            newRequest.setClient(client);
+                            newRequest.setOpen(false); // По умолчанию запрос не открыт
+                            newRequest.setFirstAmount(0.0);
+                            newRequest.setOpeningDate(null);
+
+                            clientsDepositsService.saveEntity(newRequest);
+
+                            // Создание операции
+                            Operation operation = new Operation();
+                            operation.setDeposit(depositToOpen);
+                            operation.setClient(client);
+                            operation.setDateSend(new Date(System.currentTimeMillis()));
+                            operation.setType("open");
+                            operation.setSum(initialAmount);
+
+                            try {
+                                operationService.saveEntity(operation);
+                                OperationDTO operationDTO = new OperationDTO(operation);
+
+                                response = new Response(ResponseStatus.OK,
+                                        "Запрос на открытие депозита успешно сохранён!", gson.toJson(operationDTO));
+                            } catch (NonUniqueObjectException e) {
+                                response = new Response(ResponseStatus.ERROR,
+                                        "Запрос на открытие депозита уже существует: " + e.getMessage());
+                                System.err.println("Ошибка: " + e.getMessage());
+                            }
+                        } catch (Exception e) {
+                            response = new Response(ResponseStatus.ERROR,
+                                    "Ошибка при обработке запроса на открытие депозита: " + e.getMessage());
+                            e.printStackTrace();
+                        }
+                        break;
+                    }
+
+
+                    case GETOPERATIONS: {
+                        System.out.println("Получение всех запросов на операции.");
+                        List<Operation> operations = operationService.findAllEntities();
+                        if (operations != null && !operations.isEmpty()) {
+                            List<Operation> operationtoDTOS = operations.stream()
+                                    .filter(operation -> !operation.isDone())
+                                    .collect(Collectors.toList());
+                            System.out.println(operationtoDTOS);
+
+                            List<OperationDTO> operationDTOS = operationtoDTOS.stream()
+                                    .map(OperationDTO::new)
+                                    .collect(Collectors.toList());
+                            System.out.println(operationDTOS);
+
+                            response = new Response(ResponseStatus.OK, "Operations retrieved successfully.", gson.toJson(operationDTOS));
+                            System.out.println("Список операций отправлен клиенту.");
+                        } else {
+                            response = new Response(ResponseStatus.ERROR, "No op found.");
+                            System.out.println("Ошибка: операции не найдены.");
+                        }
+                        break;
+                    }
 
                     default:
                         response = new Response(ResponseStatus.ERROR, "Unknown request type.");
-                        break;
                 }
 
                 String jsonResponse = new Gson().toJson(response);
                 System.out.println(gson.toJson(response));
                 System.out.println("Sending response: " + jsonResponse);
                 out.println(gson.toJson(response));
-
                 out.flush();
             }
-        } catch (
-                IOException e) {
-            e.printStackTrace();
+        } catch (SocketException e) {
+            System.err.println("Ошибка при работе с сокетом (возможно, клиент отключился): " + e.getMessage());
+        } catch (IOException e) {
+            System.err.println("Ошибка при чтении данных: " + e.getMessage());
         } finally {
-            try {
-                if (in != null) {
-                    in.close();
-                }
-                if (out != null) {
-                    out.close();
-                }
-                if (clientSocket != null && !clientSocket.isClosed()) {
-                    clientSocket.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            closeResources();
         }
     }
+
+    private void closeResources() {
+        try {
+            if (in != null) {
+                in.close();
+            }
+            if (out != null) {
+                out.close();
+            }
+            if (clientSocket != null) {
+                clientSocket.close();
+            }
+            System.out.println("Ресурсы успешно освобождены");
+        } catch (IOException e) {
+            System.err.println("Ошибка при закрытии ресурсов: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public static void writeToFile(String fileName, String data) {
+        try {
+            Path filePath = Paths.get(fileName);
+
+            if (!Files.exists(filePath)) {
+                Files.createFile(filePath);
+            }
+
+            Files.write(filePath, data.getBytes(), StandardOpenOption.APPEND);
+
+            System.out.println("Данные успешно записаны в файл: " + fileName);
+        } catch (IOException e) {
+            System.err.println("Ошибка при записи в файл: " + e.getMessage());
+        }
+    }
+
 }

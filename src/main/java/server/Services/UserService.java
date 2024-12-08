@@ -19,7 +19,6 @@ public class UserService implements Service<User> {
         User entity = (User) daoService.findById(id);
         if (entity.getClient() != null)  {
             entity.getClient().setUsers(null);
-            /////////////
         }
         return entity;
     }

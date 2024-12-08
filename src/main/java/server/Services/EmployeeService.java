@@ -14,12 +14,7 @@ public class EmployeeService implements Service<Employee>{
     @Override
     public Employee findEntity(int id) {
         Employee entity = (Employee) daoService.findById(id);
-        if (entity.getUsers() != null) {
-            // что-нибудь ещё добавить
-            //////entity.getUsers().;
-            /////////////
-        }
-        return null;
+        return entity;
     }
 
     @Override
@@ -41,5 +36,6 @@ public class EmployeeService implements Service<Employee>{
     public List<Employee> findAllEntities() {
         return daoService.findAll();
     }
+
 }
 

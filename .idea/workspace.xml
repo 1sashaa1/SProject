@@ -4,19 +4,29 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ca17c775-5022-47b7-87cf-d2ce175f9528" name="Changes" comment="Employee closes/opens a deposit">
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/DataAccessObjects/QuestionDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/ClientIdRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/JoinMyDepositsDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/QuestionDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Question.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Services/QuestionService.java" afterDir="false" />
+    <list default="true" id="ca17c775-5022-47b7-87cf-d2ce175f9528" name="Changes" comment="CHAT">
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/DataAccessObjects/OperationDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/DataAccessObjects/PercentDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/EmployeeClientDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/EmployeeDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/OperationDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Operation.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Percent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Services/OperationService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Services/PercentService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Utility/CustomDateAdapter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/server/Enums/RequestType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Enums/RequestType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/server/Models/DTO/UserDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/UserDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/server/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/server/Models/DTO/ClientDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/ClientDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/server/Models/DTO/JoinMyDepositsDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/JoinMyDepositsDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/server/Services/ClientService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Services/ClientService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Deposit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Deposit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Employee.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Employee.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/server/Models/Entities/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/server/Services/ClientsDepositsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Services/ClientsDepositsService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/server/Services/EmployeeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Services/EmployeeService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/server/Services/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Services/UserService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/server/Utility/ClientThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Utility/ClientThread.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" afterDir="false" />
     </list>
@@ -208,7 +218,19 @@
       <workItem from="1732720038228" duration="9241000" />
       <workItem from="1732736494006" duration="5866000" />
       <workItem from="1732778344628" duration="13175000" />
-      <workItem from="1732810587239" duration="1378000" />
+      <workItem from="1732810587239" duration="10622000" />
+      <workItem from="1732866739814" duration="16135000" />
+      <workItem from="1732908845782" duration="2407000" />
+      <workItem from="1732954191871" duration="11639000" />
+      <workItem from="1732972167530" duration="8621000" />
+      <workItem from="1733059029079" duration="370000" />
+      <workItem from="1733080288529" duration="7900000" />
+      <workItem from="1733143702137" duration="4930000" />
+      <workItem from="1733149621279" duration="4062000" />
+      <workItem from="1733387555772" duration="661000" />
+      <workItem from="1733390227902" duration="272000" />
+      <workItem from="1733645550578" duration="15808000" />
+      <workItem from="1733672289105" duration="2656000" />
     </task>
     <task id="LOCAL-00001" summary="Create commit">
       <option name="closed" value="true" />
@@ -242,7 +264,15 @@
       <option name="project" value="LOCAL" />
       <updated>1731970105283</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="CHAT">
+      <option name="closed" value="true" />
+      <created>1732811986588</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1732811986588</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -253,6 +283,7 @@
     <MESSAGE value="Employee deposit and notification" />
     <MESSAGE value="Request to open deposits" />
     <MESSAGE value="Employee closes/opens a deposit" />
-    <option name="LAST_COMMIT_MESSAGE" value="Employee closes/opens a deposit" />
+    <MESSAGE value="CHAT" />
+    <option name="LAST_COMMIT_MESSAGE" value="CHAT" />
   </component>
 </project>

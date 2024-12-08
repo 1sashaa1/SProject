@@ -48,6 +48,8 @@
         <mapping class="server.Models.Entities.Admin"/>
         <mapping class="server.Models.Entities.ClientsDeposits"/>
         <mapping class="server.Models.Entities.Question"/>
+        <mapping class="server.Models.Entities.Percent"/>
+        <mapping class="server.Models.Entities.Operation"/>
 
     </session-factory>
 </hibernate-configuration>

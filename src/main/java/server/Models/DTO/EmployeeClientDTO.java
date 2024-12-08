@@ -1,17 +1,17 @@
 package server.Models.DTO;
 
-import server.Models.Entities.Client;
+import java.util.Date;
 
-public class ClientDTO {
+public class EmployeeClientDTO {
+    private String email;
 
-    private int id;
     private String name;
 
     private String surname;
 
     private String patronymic;
 
-    private String dob;
+    private Date dob;
 
     private String citizenship;
 
@@ -21,35 +21,34 @@ public class ClientDTO {
 
     private String documentNumber;
 
-    private String email;
+    private int IdE;
 
-    public ClientDTO(Client client) {
-        this.id = client.getId();
-        this.name = client.getName();
-this.surname = client.getSurname();
-this.patronymic = client.getPatronymic();
-this.dob = String.valueOf(client.getDob());
-this.citizenship = client.getCitizenship();
-this.documentNumber = client.getDocumentNumber();
-this.documentType = client.getDocumentType();
-this.idNumber = client.getIdNumber();
-this.email = client.getEmail();
+    private String seat;
+
+    public EmployeeClientDTO(String email, String name, String surname, String patronymic, Date dob, String citizenship, String documentType, String idNumber, String documentNumber, int idE, String seat) {
+        this.email = email;
+        this.name = name;
+        this.surname = surname;
+        this.patronymic = patronymic;
+        this.dob = dob;
+        this.citizenship = citizenship;
+        this.documentType = documentType;
+        this.idNumber = idNumber;
+        this.documentNumber = documentNumber;
+        IdE = idE;
+        this.seat = seat;
     }
 
-    public ClientDTO(int id) {
-        this.id = id;
+    public String getEmail() {
+        return email;
     }
 
-    public int getId() {
-        return id;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getName() {
         return name;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public void setName(String name) {
@@ -72,11 +71,11 @@ this.email = client.getEmail();
         this.patronymic = patronymic;
     }
 
-    public String getDob() {
+    public Date getDob() {
         return dob;
     }
 
-    public void setDob(String dob) {
+    public void setDob(Date dob) {
         this.dob = dob;
     }
 
@@ -112,11 +111,19 @@ this.email = client.getEmail();
         this.documentNumber = documentNumber;
     }
 
-    public String getEmail() {
-        return email;
+    public int getIdE() {
+        return IdE;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setIdE(int idE) {
+        IdE = idE;
+    }
+
+    public String getSeat() {
+        return seat;
+    }
+
+    public void setSeat(String seat) {
+        this.seat = seat;
     }
 }

@@ -61,7 +61,7 @@ public class ClientsDepositsService implements Service<ClientsDeposits> {
     public List<JoinMyDepositsDTO> getMyDeposits(int idUser) {
         System.out.println("idUser: " + idUser);
         String hql = "SELECT new server.Models.DTO.JoinMyDepositsDTO(" +
-                "d.nameDeposit, d.type, d.interestRate, d.term, " +
+                "cd.idDeposit, d.nameDeposit, d.type, d.interestRate, d.term, " +
                 "d.isProlongation, cd.firstAmount, cd.openingDate) " +
                 "FROM Client c " +
                 "JOIN c.users u " +

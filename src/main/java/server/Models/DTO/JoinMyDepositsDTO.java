@@ -3,6 +3,7 @@ package server.Models.DTO;
 import java.util.Date;
 
 public class JoinMyDepositsDTO {
+    private int idDeposit;
     private String nameDeposit;
     private String type;
     private double interestRate;
@@ -14,8 +15,9 @@ public class JoinMyDepositsDTO {
     public JoinMyDepositsDTO() {
     }
 
-    public JoinMyDepositsDTO(String nameDeposit, String type, double interestRate, double term,
+    public JoinMyDepositsDTO(int idDeposit, String nameDeposit, String type, double interestRate, double term,
                              boolean isProlongation, double firstAmount, Date openingDate) {
+        this.idDeposit = idDeposit;
         this.nameDeposit = nameDeposit;
         this.type = type;
         this.interestRate = interestRate;

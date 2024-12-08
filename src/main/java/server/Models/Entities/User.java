@@ -18,8 +18,6 @@ public class User implements Serializable {
     private String role;
     @Column(name = "client_client_id", length = 45)
     private Client client;
-    @Column(name = "employee_idemployee", length = 45)
-    private Employee employee;
     @ManyToOne
     @JoinColumn(name = "admin_admin_id")
     private Admin admin;
@@ -33,14 +31,6 @@ public class User implements Serializable {
         this.password = password;
         this.role = role;
         this.client = client;
-    }
-
-    public User(int id, String login, String password, String role, Employee employee) {
-        this.id = id;
-        this.login = login;
-        this.password = password;
-        this.role = role;
-        this.employee = employee;
     }
 
     @Id
@@ -65,18 +55,11 @@ public class User implements Serializable {
         return role;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "client_client_id", nullable = true) // Это внешняя ссылка на client_id в таблице Client
     public Client getClient() {
         return client;
     }
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "employee_idemployee", nullable = true)
-    public Employee getEmployee() {
-        return employee;
-    }
-
 
     public void setId(int id) {
         this.id = id;
@@ -96,16 +79,6 @@ public class User implements Serializable {
 
     public void setClient(Client client) {
         this.client = client;
-        if (client != null) {
-            this.employee = null;
-        }
-    }
-
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
-        if (this.client == null) {
-            this.employee = employee;
-        }
     }
 
     @ManyToOne(fetch = FetchType.EAGER)

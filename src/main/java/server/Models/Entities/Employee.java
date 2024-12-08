@@ -18,27 +18,17 @@ public class Employee implements Serializable {
     @Column(name = "seat", length = 45)
     private String seat;
 
-    @Column(name = "name", length = 45)
-    private String name;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "client_id")
+    private Client client;
 
-    @Column(name = "surname", length = 45)
-    private String surname;
-
-    @Column(name = "patronymic", length = 45)
-    private String patronymic;
-
-    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<User> users = new HashSet<>();
 
     public Employee(){}
 
-    public Employee(int idemployee, String seat, String name, String surname, String patronymic, Set<User> users) {
+    public Employee(int idemployee, String seat, String name, String surname, String patronymic, Client client) {
         this.idemployee = idemployee;
         this.seat = seat;
-        this.name = name;
-        this.surname = surname;
-        this.patronymic = patronymic;
-        this.users = users;
+        this.client = client;
     }
 
     public int getIdemployee() {
@@ -57,35 +47,11 @@ public class Employee implements Serializable {
         this.seat = seat;
     }
 
-    public String getName() {
-        return name;
+    public Client getClient() {
+        return client;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getPatronymic() {
-        return patronymic;
-    }
-
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
-    }
-
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
+    public void setClient(Client client) {
+        this.client = client;
     }
 }

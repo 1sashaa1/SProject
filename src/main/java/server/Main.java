@@ -9,57 +9,46 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import java.util.concurrent.*;
+
+
+//Паттерн производитель-потребитель
 public class Main {
     private static final int PORT_NUMBER = 5555;
-    private static ServerSocket serverSocket;
-
-    private static ClientThread clientHandler;
-    private static Thread thread;
-    private static List<Socket> currentSockets = new CopyOnWriteArrayList<>();
+    private static final int THREAD_POOL_SIZE = 10; // Количество потоков в пуле
+    private static ExecutorService threadPool = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
+    private static BlockingQueue<Socket> taskQueue = new LinkedBlockingQueue<>();
 
     public static void main(String[] args) throws IOException {
-        try {
-            serverSocket = new ServerSocket(PORT_NUMBER);
-            while (true) {
-                // Обрабатываем текущие подключённые сокеты
-                Iterator<Socket> iterator = currentSockets.iterator();
-                while (iterator.hasNext()) {
-                    Socket socket = iterator.next();
-                    if (socket.isClosed()) {
-                        iterator.remove();
-                        continue;
+        try (ServerSocket serverSocket = new ServerSocket(PORT_NUMBER)) {
+            System.out.println("Сервер запущен на порту " + PORT_NUMBER);
+
+            // Поток для обработки очереди задач
+            Runnable taskProcessor = () -> {
+                while (!Thread.currentThread().isInterrupted()) {
+                    try {
+                        Socket socket = taskQueue.take(); // Берём задачу из очереди
+                        threadPool.submit(new ClientThread(socket));
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
                     }
-                    String socketInfo = "Клиент " + socket.getInetAddress() + ":" + socket.getPort() + " подключён";
-                    System.out.println(socketInfo);
                 }
+            };
 
-                // Принимаем новое подключение
-                try {
-                    Socket socket = serverSocket.accept();//дискриптор
-                    currentSockets.add(socket);
+            new Thread(taskProcessor).start(); // Запускаем поток обработки задач
 
-                    // Создаём и запускаем поток для обработки клиента
-                    clientHandler = new ClientThread(socket);//для каждого сокета свой обрботчик
-                    thread = new Thread(clientHandler);//создаём поток
-                    thread.start();
-                } catch (IOException e) {
-                    System.err.println("Ошибка при подключении клиента: " + e.getMessage());
-                }
+            // Принимаем клиентов и добавляем их в очередь
+            while (true) {
+                Socket socket = serverSocket.accept();
+                System.out.println("Подключён клиент: " + socket.getInetAddress());
+                taskQueue.put(socket);
             }
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         } finally {
-            shutdown(); // Очищаем ресурсы при завершении работы
-        }
-    }
-
-    public static void shutdown() throws IOException {
-        for (Socket socket : currentSockets) {
-            if (!socket.isClosed()) {
-                socket.close();
-            }
-        }
-
-        if (serverSocket != null && !serverSocket.isClosed()) {
-            serverSocket.close();
+            threadPool.shutdown();
         }
     }
 }

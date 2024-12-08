@@ -40,10 +40,21 @@ public class Deposit implements Serializable{
     @Column(name = "isProlongation", length = 45)
     private boolean isProlongation;
 
-    @OneToMany(mappedBy = "deposit", orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "deposit", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<ClientsDeposits> clientsDeposits;
 
+    @OneToOne(mappedBy = "deposit", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Operation operation;
+
     public Deposit() {}
+
+    public Operation getOperation() {
+        return operation;
+    }
+
+    public void setOperation(Operation operation) {
+        this.operation = operation;
+    }
 
     public int getId() {
         return id;

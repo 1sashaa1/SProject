@@ -45,6 +45,9 @@ public class Client implements Serializable {
     @Column(name = "document_number", length = 45)
     private String documentNumber;
 
+    @Column(name = "email", length = 45)
+    private String email;
+
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<User> users = new HashSet<>();
 
@@ -53,6 +56,12 @@ public class Client implements Serializable {
 
     @OneToMany(mappedBy = "client", orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<Question> questions;
+
+    @OneToOne(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Employee employee;
+
+    @OneToOne(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Operation operation;
 
     public Client() {
     }
@@ -146,8 +155,48 @@ public class Client implements Serializable {
         this.documentNumber = documentNumber;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Set<ClientsDeposits> getClientsDeposits() {
+        return clientsDeposits;
+    }
+
+    public void setClientsDeposits(Set<ClientsDeposits> clientsDeposits) {
+        this.clientsDeposits = clientsDeposits;
+    }
+
+    public Set<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(Set<Question> questions) {
+        this.questions = questions;
+    }
+
     public Set<User> getUsers() {
         return users;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    public Operation getOperation() {
+        return operation;
+    }
+
+    public void setOperation(Operation operation) {
+        this.operation = operation;
     }
 
     public void setUsers(Set<User> users) {
