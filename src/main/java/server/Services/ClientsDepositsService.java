@@ -49,7 +49,7 @@ public class ClientsDepositsService implements Service<ClientsDeposits> {
     public List<JoinClientsDepositsDTO> getCombinedData() {
         String hql = "SELECT new server.Models.DTO.JoinClientsDepositsDTO(" +
                 "cd.idDeposit, d.nameDeposit, cd.isOpen, cd.firstAmount, cd.openingDate, " +
-                "c.name, c.surname, c.patronymic) " +
+                "c.id, c.name, c.surname, c.patronymic) " +
                 "FROM Client c " +
                 "JOIN c.clientsDeposits cd JOIN cd.deposit d";
 

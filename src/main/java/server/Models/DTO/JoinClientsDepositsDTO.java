@@ -11,19 +11,29 @@ public class JoinClientsDepositsDTO {
     private double firstAmount;
     private Date openingDate;
 
+    private int idClient;
     private String name;
     private String surname;
     private String patronymic;
 
-    public JoinClientsDepositsDTO(int idDeposit, String nameDeposit, boolean isOpen, double firstAmount, Date openingDate, String name, String surname, String patronymic) {
+    public JoinClientsDepositsDTO(int idDeposit, String nameDeposit, boolean isOpen, double firstAmount, Date openingDate, int idClient, String name, String surname, String patronymic) {
         this.idDeposit = idDeposit;
         this.nameDeposit = nameDeposit;
         this.isOpen = isOpen;
         this.firstAmount = firstAmount;
         this.openingDate = openingDate;
+        this.idClient = idClient;
         this.name = name;
         this.surname = surname;
         this.patronymic = patronymic;
+    }
+
+    public int getIdClient() {
+        return idClient;
+    }
+
+    public void setIdClient(int idClient) {
+        this.idClient = idClient;
     }
 
     public int getIdDeposit() {

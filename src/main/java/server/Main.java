@@ -1,5 +1,8 @@
 package server;
 
+import server.Models.Entities.ClientsDeposits;
+import server.Services.ClientsDepositsService;
+import server.Services.EmployeeService;
 import server.Utility.ClientThread;
 
 import java.io.IOException;
@@ -27,7 +30,7 @@ public class Main {
             Runnable taskProcessor = () -> {
                 while (!Thread.currentThread().isInterrupted()) {
                     try {
-                        Socket socket = taskQueue.take(); // Берём задачу из очереди
+                        Socket socket = taskQueue.take();
                         threadPool.submit(new ClientThread(socket));
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
@@ -37,9 +40,8 @@ public class Main {
                 }
             };
 
-            new Thread(taskProcessor).start(); // Запускаем поток обработки задач
+            new Thread(taskProcessor).start();
 
-            // Принимаем клиентов и добавляем их в очередь
             while (true) {
                 Socket socket = serverSocket.accept();
                 System.out.println("Подключён клиент: " + socket.getInetAddress());

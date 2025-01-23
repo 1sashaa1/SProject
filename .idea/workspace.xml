@@ -4,31 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ca17c775-5022-47b7-87cf-d2ce175f9528" name="Changes" comment="CHAT">
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/DataAccessObjects/OperationDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/DataAccessObjects/PercentDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/EmployeeClientDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/EmployeeDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/OperationDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Operation.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Percent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Services/OperationService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Services/PercentService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/server/Utility/CustomDateAdapter.java" afterDir="false" />
+    <list default="true" id="ca17c775-5022-47b7-87cf-d2ce175f9528" name="Changes" comment="Admin work">
+      <change afterPath="$PROJECT_DIR$/src/main/java/server/Utility/EmailService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/server/Enums/RequestType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Enums/RequestType.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/server/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/server/Models/DTO/ClientDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/ClientDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/server/Models/DTO/JoinMyDepositsDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/JoinMyDepositsDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Deposit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Deposit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Employee.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Employee.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/server/Models/Entities/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/server/Models/DTO/JoinClientsDepositsDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/JoinClientsDepositsDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/server/Models/DTO/OperationDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Models/DTO/OperationDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/server/Models/Entities/ClientsDeposits.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/ClientsDeposits.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Operation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Models/Entities/Operation.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/server/Services/ClientsDepositsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Services/ClientsDepositsService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/server/Services/EmployeeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Services/EmployeeService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/server/Services/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Services/UserService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/server/Utility/ClientThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/Utility/ClientThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,7 +61,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/course 3/СТРweb-пр/JDBC/MyDB&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/course 3/Стажировка/tech_task&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -83,7 +70,7 @@
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;editing.templates&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.IDE.editor.colors&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -230,7 +217,24 @@
       <workItem from="1733387555772" duration="661000" />
       <workItem from="1733390227902" duration="272000" />
       <workItem from="1733645550578" duration="15808000" />
-      <workItem from="1733672289105" duration="2656000" />
+      <workItem from="1733672289105" duration="13723000" />
+      <workItem from="1733739895029" duration="2593000" />
+      <workItem from="1733748704075" duration="4517000" />
+      <workItem from="1733754524052" duration="1914000" />
+      <workItem from="1733762937990" duration="13244000" />
+      <workItem from="1733816443480" duration="9504000" />
+      <workItem from="1733835481715" duration="2026000" />
+      <workItem from="1733847565201" duration="3892000" />
+      <workItem from="1733944093045" duration="2247000" />
+      <workItem from="1733991745210" duration="672000" />
+      <workItem from="1733993365189" duration="1214000" />
+      <workItem from="1734980603818" duration="102000" />
+      <workItem from="1735158343436" duration="700000" />
+      <workItem from="1735199390972" duration="1931000" />
+      <workItem from="1735284566921" duration="1251000" />
+      <workItem from="1735488028010" duration="1137000" />
+      <workItem from="1737017020619" duration="18000" />
+      <workItem from="1737301738494" duration="33000" />
     </task>
     <task id="LOCAL-00001" summary="Create commit">
       <option name="closed" value="true" />
@@ -272,7 +276,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732811986588</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Admin work">
+      <option name="closed" value="true" />
+      <created>1733676002712</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1733676002712</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -284,6 +296,11 @@
     <MESSAGE value="Request to open deposits" />
     <MESSAGE value="Employee closes/opens a deposit" />
     <MESSAGE value="CHAT" />
-    <option name="LAST_COMMIT_MESSAGE" value="CHAT" />
+    <MESSAGE value="Admin work" />
+    <option name="LAST_COMMIT_MESSAGE" value="Admin work" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

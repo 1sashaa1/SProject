@@ -27,6 +27,17 @@ public class ClientsDeposits implements Serializable {
     @JoinColumn(name = "id_dep_data", nullable = true)
     private Deposit deposit;
 
+    @OneToOne(mappedBy = "deposit", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Operation operation;
+
+    public Operation getOperation() {
+        return operation;
+    }
+
+    public void setOperation(Operation operation) {
+        this.operation = operation;
+    }
+
     public ClientsDeposits() {
     }
 

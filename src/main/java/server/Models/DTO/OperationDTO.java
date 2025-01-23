@@ -19,6 +19,10 @@ public class OperationDTO {
 
     private boolean done;
 
+    private int iddata;
+    private int idclient;
+    private int idcldep;
+
     public OperationDTO() {
     }
 
@@ -28,6 +32,35 @@ public class OperationDTO {
         this.sum = operation.getSum();
         this.type = operation.getType();
         this.done = operation.isDone();
+        this.idclient = operation.getClient().getId();
+        this.idcldep = operation.getClientsDeposits() != null
+                ? operation.getClientsDeposits().getIdDeposit()
+                : 0;
+        this.iddata = operation.getDeposit().getId();
+    }
+
+    public int getIddata() {
+        return iddata;
+    }
+
+    public void setIddata(int iddata) {
+        this.iddata = iddata;
+    }
+
+    public int getIdclient() {
+        return idclient;
+    }
+
+    public void setIdclient(int idclient) {
+        this.idclient = idclient;
+    }
+
+    public int getIdcldep() {
+        return idcldep;
+    }
+
+    public void setIdcldep(int idcldep) {
+        this.idcldep = idcldep;
     }
 
     public int getIdoperation() {

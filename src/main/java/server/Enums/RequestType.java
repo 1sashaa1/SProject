@@ -44,7 +44,5 @@ public enum RequestType { //перечисление, набор констан�
     GETTRUECLIENTS,
     GETTRUEEMPLOYEES,
 
-    GETALLREQUES,
-
     GETOPERATIONS
 }

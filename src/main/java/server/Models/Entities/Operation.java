@@ -19,13 +19,26 @@ public class Operation {
     @Column(name = "done", length = 45)
     private boolean done;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.MERGE, orphanRemoval = false)
     @JoinColumn(name = "depositdata_iddeposit", nullable = true)
     private Deposit deposit;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.MERGE, orphanRemoval = false)
     @JoinColumn(name = "client_id", nullable = true)
     private Client client;
+
+    @OneToOne(cascade = CascadeType.MERGE, orphanRemoval = false)
+    @JoinColumn(name = "clientdeposit", nullable = true)
+    private ClientsDeposits clientsDeposits;
+
+
+    public ClientsDeposits getClientsDeposits() {
+        return clientsDeposits;
+    }
+
+    public void setClientsDeposits(ClientsDeposits clientsDeposits) {
+        this.clientsDeposits = clientsDeposits;
+    }
 
     public Client getClient() {
         return client;
